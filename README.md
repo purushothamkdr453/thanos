@@ -7,8 +7,8 @@
        - [step-1: Creating monitoring namespace](#step-1-creating-monitoring-namespace)
        - [step-2: Creating object storage secret](#step-2-creating-object-storage-secret)
        - [step-3: Creating Promtheus instances](#step-3-creating-promtheus-instances)
-       - [step-4: Deploying thanos querier and querier frontend components](step-4:-deploying-thanos-querier-and-querier-frontend-components)
-       - [step-5: Verifying thanos features](step-5:-verifying-thanos-features)
+       - [step-4: Deploying thanos querier and querier frontend components](#step-4:-deploying-thanos-querier-and-querier-frontend-components)
+       - [step-5: Verifying thanos features](#step-5:-verifying-thanos-features)
 
 
 ## Thanos
