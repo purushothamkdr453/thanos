@@ -1,0 +1,65 @@
+pushgateway:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+  
+server:
+  enabled: true
+  name: prom-us-east-b
+
+  sidecarContainers:
+     thanos:
+        image: quay.io/thanos/thanos:v0.22.0
+        args:
+        - sidecar
+        - --tsdb.path=/data
+        - --prometheus.url=http://localhost:9090 
+        - --http-address=0.0.0.0:10902
+        - --grpc-address=0.0.0.0:10901
+        - --objstore.config-file=/etc/thanos/bucket-config.yaml
+        ports:
+        - containerPort: 10902
+          name: http
+        - containerPort: 10901
+          name: grpc
+        volumeMounts:
+        - name: s3-config
+          mountPath: "/etc/thanos"
+        - name: storage-volume
+          mountPath: /data
+
+  image:
+    repository: quay.io/prometheus/prometheus
+    tag: v2.26.0
+    pullPolicy: IfNotPresent
+
+  extraFlags:
+    - web.enable-lifecycle
+    - web.enable-admin-api
+    - storage.tsdb.no-lockfile
+    - storage.tsdb.min-block-duration=5m
+    - storage.tsdb.max-block-duration=5m
+
+  configPath: /etc/config/prometheus.yml
+
+  global:
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    evaluation_interval: 30s
+    external_labels:
+       cluster: "us-east"
+       replica: "B"
+       
+
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    mountPath: /data
+    size: 8Gi
+  replicaCount: 1
+  extraVolumes:
+  - name: s3-config
+    secret:
+      secretName: objectstorage-config

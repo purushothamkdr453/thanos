@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: objectstorage-config 
+  namespace: monitoring
+type: Opaque
+stringData:
+  bucket-config.yaml: |
+    type: S3
+    config:
+      bucket: "<bucket-name>"
+      endpoint: "s3.us-east-1.amazonaws.com"
+      region: "us-east-1"
+      access_key: "<access-key>"
+      secret_key: "<secret-access-key>"

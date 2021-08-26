@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: thanos-query
+  name: thanos-query
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thanos-query
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thanos-query
+    spec:
+      containers:
+      - args:
+        - query
+        - --log.level=debug
+        - --http-address=0.0.0.0:9090
+        - --grpc-address=0.0.0.0:10901
+        - --query.replica-label=replica
+        - --store=dnssrv+_grpc._tcp.thanos-sidecar-us-east-a.monitoring.svc.cluster.local
+        - --store=dnssrv+_grpc._tcp.thanos-sidecar-us-east-b.monitoring.svc.cluster.local
+        - --store=dnssrv+_grpc._tcp.thanos-sidecar-india-a.monitoring.svc.cluster.local
+        image: quay.io/thanos/thanos:v0.22.0
+        name: thanos-query
+        ports:
+        - containerPort: 9090
+          name: http
+        - containerPort: 10901
+          name: grpc
