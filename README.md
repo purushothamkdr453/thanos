@@ -25,6 +25,12 @@
 - kubernetes cluster
 - helm
 
+add the below repo
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+```
+
 ### Setup
 
 we will be working on 3 features of thanos i.e Global query view, Highly availability prometheus,Unlimited retention. So our setup looks as follows.
